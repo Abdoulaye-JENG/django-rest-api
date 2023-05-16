@@ -5,7 +5,7 @@ from .models import Product
 class ProductSerializer(serializers.ModelSerializer):
     # Serializer class that will help us (through the API)
     # return any product instance data
-    # In serialized json data
+    # In serialized JSON
 
     # We can enrich our ProductSerializer as well
     # by adding extra data
@@ -13,7 +13,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ["id", "title", "content", "sale_price", "s_discount"]
+        fields = ["id", "title", "content", "price", "sale_price", "s_discount"]
 
     def get_s_discount(self, instance):
-        return instance.get_discount()
+        try:
+            return instance.get_discount()
+        except:
+            return None
