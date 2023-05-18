@@ -3,7 +3,7 @@ import requests
 # endpoint = "https://httpbin.org/anything"
 endpoint = "http://localhost:8000/api/products/"
 
-data = {"title": "Product client added 1"}
+data = {"title": "Cient Product N° 4", "content": "Client Product 4 content"}
 
 get_response = requests.post(endpoint, json=data)
 
