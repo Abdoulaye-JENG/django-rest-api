@@ -7,15 +7,17 @@ from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 
+PRODUCT_SERIALIZER_QUERYSET = Product.objects.all()
+
 
 class ProductDetailAPIView(generics.RetrieveAPIView):
-    queryset = Product.objects.all()
+    queryset = PRODUCT_SERIALIZER_QUERYSET
     serializer_class = ProductSerializer
     # lookup_field = "pk"
 
 
 class ProductListCreateAPIView(generics.ListCreateAPIView):
-    queryset = Product.objects.all()
+    queryset = PRODUCT_SERIALIZER_QUERYSET
     serializer_class = ProductSerializer
 
     def perform_create(self, serializer):
@@ -28,6 +30,32 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
         if content is None:
             content = title
         serializer.save(content=content)
+
+
+class ProductUpdateAPIView(generics.UpdateAPIView):
+    serializer_class = ProductSerializer
+    queryset = PRODUCT_SERIALIZER_QUERYSET
+    lookup_field = "pk"
+
+    def perform_update(self, serializer):
+        # Overriding this method makes sense only
+        # if we have further operation to do with
+        # The object instance (serializer)
+        instance = serializer.save()
+        if not instance.content:
+            instance.content = instance.title
+
+
+class ProductDeleteAPIView(generics.DestroyAPIView):
+    serializer_class = ProductSerializer
+    queryset = PRODUCT_SERIALIZER_QUERYSET
+    lookup_field = "pk"
+
+    def perform_destroy(self, instance):
+        # Overriding this method like I dot it right below
+        # has actually no sense because it is the default
+        # operation
+        super().perform_destroy(instance)
 
 
 @api_view(["GET", "POST"])
