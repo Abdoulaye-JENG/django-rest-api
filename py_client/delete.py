@@ -1,6 +1,6 @@
 import requests
 
-endpoint = "http://localhost:8000/api/products/7/delete/"
+endpoint = "http://localhost:8000/api/products/11/delete/"
 
 response = requests.delete(endpoint)
 

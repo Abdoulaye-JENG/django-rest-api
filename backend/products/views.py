@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, mixins
 
 from .serializers import ProductSerializer
 
@@ -56,6 +56,39 @@ class ProductDeleteAPIView(generics.DestroyAPIView):
         # has actually no sense because it is the default
         # operation
         super().perform_destroy(instance)
+
+
+class ProductMixinView(
+    generics.GenericAPIView,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.UpdateModelMixin,
+):
+    serializer_class = ProductSerializer
+    queryset = PRODUCT_SERIALIZER_QUERYSET
+    lookup_field = "pk"
+
+    def get(self, request, *args, **kwargs):  # HTTP -> GET
+        # List | Detail
+        pk = kwargs.get("pk", None)
+        if pk is not None:  # Detail
+            return self.retrieve(request, *args, **kwargs)
+        else:  # List
+            return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):  # HTTP -> POST
+        # Create
+        return self.create(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):  # HTTP -> PUT
+        # Update
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):  # HTTP -> DELETE
+        # Destroy
+        return self.destroy(request, *args, **kwargs)
 
 
 @api_view(["GET", "POST"])
