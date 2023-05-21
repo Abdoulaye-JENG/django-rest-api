@@ -21,7 +21,7 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
     authentication_classes = [authentication.SessionAuthentication]
     # Only Authenticated user can acces this view
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.DjangoModelPermissions]
     # Creation available only for authenticated users
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
