@@ -1,4 +1,4 @@
-from rest_framework import generics, mixins
+from rest_framework import authentication, generics, mixins, permissions
 
 from .serializers import ProductSerializer
 
@@ -19,6 +19,11 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = PRODUCT_SERIALIZER_QUERYSET
     serializer_class = ProductSerializer
+    authentication_classes = [authentication.SessionAuthentication]
+    # Only Authenticated user can acces this view
+    permission_classes = [permissions.IsAuthenticated]
+    # Creation available only for authenticated users
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
         """Override the create method"""
