@@ -1,7 +1,7 @@
 from rest_framework import authentication, generics, mixins, permissions
 
 from .serializers import ProductSerializer
-
+from .permissions import IsStaffEditorPermission
 from .models import Product
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
@@ -21,7 +21,7 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
     authentication_classes = [authentication.SessionAuthentication]
     # Only Authenticated user can acces this view
-    permission_classes = [permissions.DjangoModelPermissions]
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
     # Creation available only for authenticated users
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
